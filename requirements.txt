@@ -1,5 +1,0 @@
-click
-black
-lint
-pytest
-pytest-cov
