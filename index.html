@@ -14,12 +14,28 @@
 <link rel=stylesheet href=https://rolozanod.github.io/css/style.css>
 <link rel=stylesheet href=https://rolozanod.github.io/css/responsive.css>
 <link rel="shortcut icon" href=images/favicon.png type=image/x-icon>
-<script>console.log("Hello!")</script><script src=https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest></script><script src=webcam.js></script>
+<script src=https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest></script>
+<script src=js/webcam.js></script>
+<script src=js/rps-dataset.js></script>
+<script>console.log("Hello!")</script>
 </head><body id=body>
-<script src=/js/mysketch.js type=text/javascript></script>
 <div id=preloader>
 <div class=book>
-<div class=book__page></div><div class=book__page></div><div class=book__page></div></div></div><div class=container>
+<div class=book__page></div><div class=book__page></div><div class=book__page></div></div></div><section id=rpsls class="rpsls section">
+<div>
+<div>
+<video autoplay playsinline muted id=wc width=224 height=224></video>
+</div></div><button type=button id=0 onclick=handleButton(this)>Rock</button>
+<button type=button id=1 onclick=handleButton(this)>Paper</button>
+<button type=button id=2 onclick=handleButton(this)>Scissors</button>
+<button type=button id=3 onclick=handleButton(this)>Spock</button>
+<button type=button id=4 onclick=handleButton(this)>Lizard</button>
+<div id=rocksamples>Rock Samples:</div><div id=papersamples>Paper Samples:</div><div id=scissorssamples>Scissors Samples:</div><div id=spocksamples>Spock Samples:</div><div id=lizardsamples>Lizard Samples:</div><button type=button id=train onclick=doTraining()>Train Network</button>
+<div id=dummy>Once training is complete, click 'Start Predicting' to see predictions, and 'Stop Predicting' to end. Once you are happy with your model, click 'Download Model' to save the model to your local disk.</div><button type=button id=startPredicting onclick=startPredicting()>Start Predicting</button>
+<button type=button id=stopPredicting onclick=stopPredicting()>Stop Predicting</button>
+<button type=button id=saveModel onclick=saveModel()>Download Model</button>
+<div id=prediction></div><script src=index_exercise.js></script>
+</section><div class=container>
 <nav class="navbar navbar-fixed-top navigation" id=top-nav>
 <a class="navbar-brand float-none float-lg-left" href=https://rolozanod.github.io>
 <img src=images/ssbg_small.png alt=logo>
