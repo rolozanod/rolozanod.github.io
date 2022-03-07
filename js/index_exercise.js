@@ -33,7 +33,7 @@ async function train() {
   //   ]
   // });
 
-  model = await tf.loadLayersModel('tf/my_model.json');
+  model = await tf.loadLayersModel('https://github.com/rolozanod/rolozanod.github.io/tree/main/tf/my_model.json');
    
   // Set the optimizer to be tf.train.adam() with a learning rate of 0.0001.
   const optimizer = tf.train.adam(0.0001);
