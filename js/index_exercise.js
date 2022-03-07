@@ -6,10 +6,9 @@ var rockSamples=0, paperSamples=0, scissorsSamples=0, spockSamples=0, lizardSamp
 let isPredicting = false;
 
 async function loadMobilenet() {
-  // const mobilenet = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json');
-  // const layer = mobilenet.getLayer('conv_pw_13_relu');
-  // const tfmodel = tf.model({inputs: mobilenet.inputs, outputs: layer.output});
-  const tfmodel = await tf.loadLayersModel('tf/my_model.json');
+  const mobilenet = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json');
+  const layer = mobilenet.getLayer('conv_pw_13_relu');
+  const tfmodel = tf.model({inputs: mobilenet.inputs, outputs: layer.output});
   return tfmodel
 }
 
@@ -25,14 +24,16 @@ async function train() {
   // to use as many hidden layers and neurons as you like.  
   // HINT: Take a look at the Rock-Paper-Scissors example. We also suggest
   // using ReLu activation functions where applicable.
-  model = tf.sequential({
-    layers: [
-      tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
-      tf.layers.dense({ units: 100, activation: 'relu'}),
-      tf.layers.dense({ units: 5, activation: 'softmax'})
-    ]
-  });
-    
+
+  // model = tf.sequential({
+  //   layers: [
+  //     tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
+  //     tf.layers.dense({ units: 100, activation: 'relu'}),
+  //     tf.layers.dense({ units: 5, activation: 'softmax'})
+  //   ]
+  // });
+
+  model = await tf.loadLayersModel('tf/my_model.json');
    
   // Set the optimizer to be tf.train.adam() with a learning rate of 0.0001.
   const optimizer = tf.train.adam(0.0001);
