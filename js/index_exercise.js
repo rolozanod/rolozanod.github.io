@@ -6,9 +6,11 @@ var rockSamples=0, paperSamples=0, scissorsSamples=0, spockSamples=0, lizardSamp
 let isPredicting = false;
 
 async function loadMobilenet() {
-  const mobilenet = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json');
-  const layer = mobilenet.getLayer('conv_pw_13_relu');
-  return tf.model({inputs: mobilenet.inputs, outputs: layer.output});
+  // const mobilenet = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json');
+  // const layer = mobilenet.getLayer('conv_pw_13_relu');
+  // const tfmodel = tf.model({inputs: mobilenet.inputs, outputs: layer.output});
+  const tfmodel = await tf.loadLayersModel('tf/my_model.json');
+  return tfmodel
 }
 
 async function train() {
@@ -152,7 +154,6 @@ async function init(){
 	await webcam.setup();
 	mobilenet = await loadMobilenet();
 	tf.tidy(() => mobilenet.predict(webcam.capture()));
-		
 }
 
 
