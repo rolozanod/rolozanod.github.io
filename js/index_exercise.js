@@ -2,7 +2,7 @@ let mobilenet;
 let model;
 const webcam = new Webcam(document.getElementById('wc'));
 const dataset = new RPSDataset();
-var rockSamples=0, paperSamples=0, scissorsSamples=0, spockSamples=0, lizardSamples=0;
+var rockSamples=0, paperSamples=0, scissorsSamples=0;
 let isPredicting = false;
 
 async function loadMobilenet() {
@@ -25,16 +25,16 @@ async function train() {
   // HINT: Take a look at the Rock-Paper-Scissors example. We also suggest
   // using ReLu activation functions where applicable.
 
-  // model = tf.sequential({
-  //   layers: [
-  //     tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
-  //     tf.layers.dense({ units: 100, activation: 'relu'}),
-  //     tf.layers.dense({ units: 5, activation: 'softmax'})
-  //   ]
-  // });
+  model = tf.sequential({
+    layers: [
+      tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
+      tf.layers.dense({ units: 100, activation: 'relu'}),
+      tf.layers.dense({ units: 3, activation: 'softmax'})
+    ]
+  });
 
-  model = await tf.loadLayersModel('tf/my_model.json');
-  console.log('Model loaded')
+  // model = await tf.loadLayersModel('tf/my_model.json');
+  console.log('Model created')
    
   // Set the optimizer to be tf.train.adam() with a learning rate of 0.0001.
   const optimizer = tf.train.adam(0.0001);
@@ -71,16 +71,16 @@ function handleButton(elem){
 			scissorsSamples++;
 			document.getElementById("scissorssamples").innerText = "Scissors samples:" + scissorsSamples;
 			break;  
-		case "3":
-			spockSamples++;
-			document.getElementById("spocksamples").innerText = "Spock samples:" + spockSamples;
-      break;
-        // Add a case for lizard samples.
-        // HINT: Look at the previous cases.
-    case "4":
-      lizardSamples++;
-      document.getElementById("lizardsamples").innerText = "Lizard samples:" + lizardSamples;
-      break;	
+		// case "3":
+		// 	spockSamples++;
+		// 	document.getElementById("spocksamples").innerText = "Spock samples:" + spockSamples;
+    //   break;
+    //     // Add a case for lizard samples.
+    //     // HINT: Look at the previous cases.
+    // case "4":
+    //   lizardSamples++;
+    //   document.getElementById("lizardsamples").innerText = "Lizard samples:" + lizardSamples;
+    //   break;	
             
 	}
 	label = parseInt(elem.id);
@@ -109,16 +109,16 @@ async function predict() {
 		case 2:
 			predictionText = "I see Scissors";
 			break;
-		case 3:
-			predictionText = "I see Spock";
-			break;
+		// case 3:
+		// 	predictionText = "I see Spock";
+		// 	break;
             
-        // Add a case for lizard samples.
-        // HINT: Look at the previous cases.
+    //     // Add a case for lizard samples.
+    //     // HINT: Look at the previous cases.
             
-    case 4:
-      predictionText = "I see Lizard";
-      break;
+    // case 4:
+    //   predictionText = "I see Lizard";
+    //   break;
 	
             
 	}
