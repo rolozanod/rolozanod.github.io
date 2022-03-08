@@ -24,6 +24,7 @@ async function train() {
   // to use as many hidden layers and neurons as you like.  
   // HINT: Take a look at the Rock-Paper-Scissors example. We also suggest
   // using ReLu activation functions where applicable.
+  // Changed to 3 units (rock, paper and scissors)
 
   model = tf.sequential({
     layers: [
