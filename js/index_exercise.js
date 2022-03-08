@@ -49,7 +49,7 @@ async function train() {
     epochs: 10,
     callbacks: {
       onBatchEnd: async (batch, logs) => {
-        loss = logs.loss.toFixed(5);
+        loss = logs.loss.toFixed(3);
         console.log('LOSS: ' + loss);
         }
       }
