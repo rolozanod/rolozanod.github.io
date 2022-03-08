@@ -14,7 +14,7 @@ async function loadMobilenet() {
 
 async function train() {
   dataset.ys = null;
-  dataset.encodeLabels(5);
+  dataset.encodeLabels(3);
     
   // In the space below create a neural network that can classify hand gestures
   // corresponding to rock, paper, scissors, lizard, and spock. The first layer
