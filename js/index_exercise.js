@@ -71,18 +71,7 @@ function handleButton(elem){
 		case "2":
 			scissorsSamples++;
 			document.getElementById("scissorssamples").innerText = "Scissors samples:" + scissorsSamples;
-			break;  
-		// case "3":
-		// 	spockSamples++;
-		// 	document.getElementById("spocksamples").innerText = "Spock samples:" + spockSamples;
-    //   break;
-    //     // Add a case for lizard samples.
-    //     // HINT: Look at the previous cases.
-    // case "4":
-    //   lizardSamples++;
-    //   document.getElementById("lizardsamples").innerText = "Lizard samples:" + lizardSamples;
-    //   break;	
-            
+			break;            
 	}
 	label = parseInt(elem.id);
 	const img = webcam.capture();
@@ -109,19 +98,7 @@ async function predict() {
 			break;
 		case 2:
 			predictionText = "I see Scissors";
-			break;
-		// case 3:
-		// 	predictionText = "I see Spock";
-		// 	break;
-            
-    //     // Add a case for lizard samples.
-    //     // HINT: Look at the previous cases.
-            
-    // case 4:
-    //   predictionText = "I see Lizard";
-    //   break;
-	
-            
+			break;          
 	}
 	document.getElementById("prediction").innerText = predictionText;
 			
