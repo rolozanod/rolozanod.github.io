@@ -138,12 +138,12 @@ function saveModel(){
 
 async function init(){
 	await webcam.setup();
-  
+
 	mobilenet = await loadMobilenet();
-  tf.tidy(() => mobilenet.predict(webcam.capture()));
+  const activation = tf.tidy(() => mobilenet.predict(webcam.capture()));
 
   model = await loadRPSnet();
-  tf.tidy(() => model.predict(webcam.capture()));
+  tf.tidy(() => model.predict(activation));
 }
 
 
