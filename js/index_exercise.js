@@ -26,15 +26,16 @@ async function train() {
   // using ReLu activation functions where applicable.
   // Changed to 3 units (rock, paper and scissors)
 
-  model = tf.sequential({
-    layers: [
-      tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
-      tf.layers.dense({ units: 100, activation: 'relu'}),
-      tf.layers.dense({ units: 3, activation: 'softmax'})
-    ]
-  });
+  // model = tf.sequential({
+  //   layers: [
+  //     tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
+  //     tf.layers.dense({ units: 100, activation: 'relu'}),
+  //     tf.layers.dense({ units: 3, activation: 'softmax'})
+  //   ]
+  // });
 
-  // model = await tf.loadLayersModel('tf/my_model.json');
+  // model = await tf.loadLayersModel("{{ `tf/my_model.json` | absURL }}");
+  model = await tf.loadLayersModel("https://rolozanod.github.io/tf/my_model.json");
   console.log('Model created')
    
   // Set the optimizer to be tf.train.adam() with a learning rate of 0.0001.
