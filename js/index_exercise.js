@@ -9,7 +9,16 @@ async function loadMobilenet() {
   const mobilenet = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json');
   const layer = mobilenet.getLayer('conv_pw_13_relu');
   const tfmodel = tf.model({inputs: mobilenet.inputs, outputs: layer.output});
+  console.log('Mobilenet model created')
   return tfmodel
+}
+
+async function loadRPSnet() {
+
+  // const model = await tf.loadLayersModel("{{ `tf/my_model.json` | absURL }}");
+  const model = await tf.loadLayersModel("https://rolozanod.github.io/tf/my_model.json");
+  console.log('RPS model created')
+  return model
 }
 
 async function train() {
@@ -26,17 +35,13 @@ async function train() {
   // using ReLu activation functions where applicable.
   // Changed to 3 units (rock, paper and scissors)
 
-  // model = tf.sequential({
-  //   layers: [
-  //     tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
-  //     tf.layers.dense({ units: 100, activation: 'relu'}),
-  //     tf.layers.dense({ units: 3, activation: 'softmax'})
-  //   ]
-  // });
-
-  // model = await tf.loadLayersModel("{{ `tf/my_model.json` | absURL }}");
-  model = await tf.loadLayersModel("https://rolozanod.github.io/tf/my_model.json");
-  console.log('Model created')
+  model = tf.sequential({
+    layers: [
+      tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
+      tf.layers.dense({ units: 100, activation: 'relu'}),
+      tf.layers.dense({ units: 3, activation: 'softmax'})
+    ]
+  });
    
   // Set the optimizer to be tf.train.adam() with a learning rate of 0.0001.
   const optimizer = tf.train.adam(0.0001);
@@ -134,7 +139,10 @@ function saveModel(){
 async function init(){
 	await webcam.setup();
 	mobilenet = await loadMobilenet();
-	tf.tidy(() => mobilenet.predict(webcam.capture()));
+  tf.tidy(() => mobilenet.predict(webcam.capture()));
+
+  model = await loadRPSnet();
+  tf.tidy(() => model.predict(webcam.capture()));
 }
 
 
