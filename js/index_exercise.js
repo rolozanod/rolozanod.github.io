@@ -21,6 +21,15 @@ async function loadRPSnet() {
   return model
 }
 
+async function loadRPSnet() {
+
+  // const model = await tf.loadLayersModel("{{ `tf/my_model.json` | absURL }}");
+  // Load the faceLandmarksDetection model assets.
+  const face_model = await faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
+  console.log('FLD model created')
+  return face_model
+}
+
 async function train() {
   dataset.ys = null;
   dataset.encodeLabels(3);
@@ -91,6 +100,15 @@ async function predict() {
       const img = webcam.capture();
       const activation = mobilenet.predict(img);
       const predictions = model.predict(activation);
+
+      // Pass in a video stream to the model to obtain an array of detected faces from the MediaPipe graph.
+      // For Node users, the `estimateFaces` API also accepts a `tf.Tensor3D`, or an ImageData object.
+      // https://blog.tensorflow.org/2020/11/iris-landmark-tracking-in-browser-with-MediaPipe-and-TensorFlowJS.html
+      // https://github.com/tensorflow/tfjs-models/tree/master/face-landmarks-detection/src/tfjs
+      // https://javascript.plainenglish.io/face-detection-in-the-browser-using-tensorflow-js-facb2304ed91
+      // const video = document.querySelector("video");
+      // const faces = await model.estimateFaces({ input: img });
+
       return predictions.as1D().argMax();
     });
     const classId = (await predictedClass.data())[0];
@@ -111,6 +129,7 @@ async function predict() {
     
     predictedClass.dispose();
     await tf.nextFrame();
+
   }
 }
 
