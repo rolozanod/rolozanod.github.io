@@ -21,15 +21,6 @@ async function loadRPSnet() {
   return model
 }
 
-// async function loadRPSnet() {
-
-//   // const model = await tf.loadLayersModel("{{ `tf/my_model.json` | absURL }}");
-//   // Load the faceLandmarksDetection model assets.
-//   const face_model = await faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
-//   console.log('FLD model created')
-//   return face_model
-// }
-
 async function train() {
   dataset.ys = null;
   dataset.encodeLabels(3);
