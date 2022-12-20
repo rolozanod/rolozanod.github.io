@@ -1,2 +1,2 @@
-# [!rolozanod.github.io](https://github.com/rolozanod/)
+# ![rolozanod.github.io](rolozanod.github.io/)
 Public web page hosted in Github to showcase my work on ML and optimization in strategic planning.
