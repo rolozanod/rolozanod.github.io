@@ -456,6 +456,37 @@ a:active {
 }
 
 /*--
+    posts start
+--*/
+.posts {
+  text-align: center;
+}
+
+.posts .block {
+  margin-bottom: 50px;
+}
+
+.posts .block i {
+  font-size: 30px;
+  display: inline-block;
+  margin-bottom: 15px;
+  color: #1bafb4;
+}
+
+.posts .block h3 {
+  color: #333333;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.posts .block p {
+  color: #666;
+}
+
+/*--
     call-to-action start
 --*/
 .call-to-action {
