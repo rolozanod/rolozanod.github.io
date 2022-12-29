@@ -33,10 +33,8 @@ $(document).ready(function () {
   $(window).on("scroll", function () {
     if ($(window).scrollTop()) {
       $("nav").addClass("nav-bg");
-      // $('#top-navbar').addClass("nav-bg");
     } else {
       $("nav").removeClass("nav-bg");
-      // $('#top-navbar').removeClass("nav-bg");
     }
   });
   
