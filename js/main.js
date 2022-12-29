@@ -8,7 +8,7 @@ $(document).ready(function () {
     new WOW().init();
 
 
-    $('#top-nav').OnePageNav({
+    $('#top-nav').onePageNav({
         currentClass: 'current',
         changeHash: true,
         scrollSpeed: 0
