@@ -182,20 +182,20 @@
 			var $parent;
 
 			//If the position is set
-			// if(position !== null) {
-			$parent = this.$elem.find('a[href$="#' + position + '"]').parent();
+			if(position !== null) {
+				$parent = this.$elem.find('a[href$="#' + position + '"]').parent();
 
-			//If it's not already the current section
-			if(!$parent.hasClass(this.config.currentClass)) {
-				//Change the highlighted nav item
-				this.adjustNav(this, $parent);
+				//If it's not already the current section
+				if(!$parent.hasClass(this.config.currentClass)) {
+					//Change the highlighted nav item
+					this.adjustNav(this, $parent);
 
-				//If there is a scrollChange callback
-				if(this.config.scrollChange) {
-					this.config.scrollChange($parent);
+					//If there is a scrollChange callback
+					if(this.config.scrollChange) {
+						this.config.scrollChange($parent);
+					}
 				}
 			}
-			// }
 		},
 
 		scrollTo: function(target, callback) {

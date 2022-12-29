@@ -29,12 +29,12 @@ $(document).ready(function () {
     ],
   });
   
-  // sticky nav
-  $(window).on("scroll", function () {
-    if ($(window).scrollTop()) {
-      $("nav").addClass("nav-bg");
-    } else {
-      $("nav").removeClass("nav-bg");
-    }
-  });
+  // // sticky nav
+  // $(window).on("scroll", function () {
+  //   if ($(window).scrollTop()) {
+  //     $("nav").addClass("nav-bg");
+  //   } else {
+  //     $("nav").removeClass("nav-bg");
+  //   }
+  // });
   
