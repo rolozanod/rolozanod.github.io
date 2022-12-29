@@ -32,11 +32,11 @@ $(document).ready(function () {
   // sticky nav
   $(window).on("scroll", function () {
     if ($(window).scrollTop()) {
-      $("nav").addClass("nav-bg");
-      // $('#top-navbar').addClass("nav-bg");
+      // $("nav").addClass("nav-bg");
+      $('#top-navbar').addClass("nav-bg");
     } else {
-      $("nav").removeClass("nav-bg");
-      // $('#top-navbar').removeClass("nav-bg");
+      // $("nav").removeClass("nav-bg");
+      $('#top-navbar').removeClass("nav-bg");
     }
   });
   
