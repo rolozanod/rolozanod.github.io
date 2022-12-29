@@ -9071,11 +9071,11 @@ h4 {
     padding-bottom: 30px;
   }
 }
-.blog-post-pagination .nav-bg ul.pagination {
+.blog-post-pagination .nav-bg-pag ul.pagination {
   padding: 0;
   margin: 0;
 }
-.blog-post-pagination .nav-bg ul.pagination li.page-item a.page-link {
+.blog-post-pagination .nav-bg-pag ul.pagination li.page-item a.page-link {
   width: 50px;
   height: 50px;
   line-height: 50px;
@@ -9089,10 +9089,10 @@ h4 {
   transition: all 0.3s ease-in-out;
   display: block;
 }
-.blog-post-pagination .nav-bg ul.pagination li.page-item a.page-link:hover {
+.blog-post-pagination .nav-bg-pag ul.pagination li.page-item a.page-link:hover {
   border: 1px solid #e0dede;
 }
-.blog-post-pagination .nav-bg ul.pagination li.page-item a.active {
+.blog-post-pagination .nav-bg-pag ul.pagination li.page-item a.active {
   border: 1px solid #e0dede;
 }
 .blog-post-widget {
