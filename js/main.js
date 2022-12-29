@@ -21,11 +21,11 @@ $(document).ready(function () {
         //console.log(scroll);
         if (scroll > 200) {
             //console.log('a');
-            console.log('Scroll>200');
+            // console.log('Scroll>200');
             $(".navigation").addClass("animated");
         } else {
             //console.log('a');
-            console.log('Scroll<=200');
+            // console.log('Scroll<=200');
             $(".navigation").removeClass("animated");
         }
     });
