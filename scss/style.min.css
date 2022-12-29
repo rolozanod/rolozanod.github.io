@@ -8433,7 +8433,7 @@ h4 {
     width: 95%;
     margin: 20px auto;
     border-radius: 3px;
-    background: #000;
+    background: transparent;
     box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.09);
   }
 }
