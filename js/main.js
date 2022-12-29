@@ -8,11 +8,11 @@ $(document).ready(function () {
     new WOW().init();
 
 
-    // $('#top-nav').onePageNav({
-    //     currentClass: 'current',
-    //     changeHash: true,
-    //     scrollSpeed: 0
-    // });
+    $('#top-nav').OnePageNav({
+        currentClass: 'current',
+        changeHash: true,
+        scrollSpeed: 0
+    });
 
 
     //animated header class
