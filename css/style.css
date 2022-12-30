@@ -5,7 +5,7 @@ body {
   font-size: 14px;
   font-weight: 300;
   line-height: 25px;
-  color: #3b4045;
+  color: #141414;
   font: 14px/22px 'Cabin', sans-serif, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -88,12 +88,12 @@ a:active {
 
 .heading {
   text-align: center;
-  color: #777777;
+  color: #141414;
   padding-bottom: 70px;
 }
 
 .heading h2 {
-  color: #3c3c3c;
+  color: #141414;
   padding-bottom: 15px;
   text-transform: capitalize;
   font-weight: 600;
@@ -102,7 +102,7 @@ a:active {
 }
 
 .heading p {
-  font-family: 'Cabin', serif;
+  font-family: 'Jost', sans-serif;
   font-size: 15px;
   line-height: 24px;
   font-weight: 300;
@@ -393,7 +393,7 @@ a:active {
 }
 
 .navigation.animated .menu a {
-  color: #666;
+  color: #808080;
 }
 
 .menu li a {
@@ -426,7 +426,7 @@ a:active {
 }
 
 .service .block h3 {
-  color: #333333;
+  color: #141414;
   font-weight: 600;
   font-size: 18px;
   margin-bottom: 15px;
@@ -435,7 +435,7 @@ a:active {
 }
 
 .service .block p {
-  color: #666;
+  color: #808080;
 }
 
 /*--
@@ -445,9 +445,9 @@ a:active {
   font-size: 26px;
   font-weight: 300;
   line-height: 36px;
-  color: #7e7e7e;
+  color: #141414;
   margin-bottom: 20px;
-  font-family: 'Droid Serif', serif;
+  font-family: 'Jost', sans-serif;
 }
 
 .about .about-slider img {
@@ -455,37 +455,6 @@ a:active {
   height: auto;
 }
 
-/*--
-    posts start
-
-.posts {
-  text-align: center;
-}
-
-.posts .block {
-  margin-bottom: 50px;
-}
-
-.posts .block i {
-  font-size: 30px;
-  display: inline-block;
-  margin-bottom: 15px;
-  color: #1bafb4;
-}
-
-.posts .block h3 {
-  color: #333333;
-  font-weight: 600;
-  font-size: 18px;
-  margin-bottom: 15px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.posts .block p {
-  color: #666;
-}
---*/
 
 /*--
     call-to-action start
