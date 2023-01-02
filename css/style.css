@@ -455,6 +455,9 @@ a:active {
   height: auto;
 }
 
+.about .content a {
+  font-family: 'Jost', sans-serif;
+}
 
 /*--
     call-to-action start
