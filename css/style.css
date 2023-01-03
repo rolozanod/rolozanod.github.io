@@ -441,6 +441,11 @@ a:active {
 /*--
     About start
 --*/
+.about .about-slider img {
+  width: 100%;
+  height: auto;
+}
+
 /* .about .content h3 {
   font-size: 26px;
   font-weight: 300;
@@ -448,11 +453,6 @@ a:active {
   color: #141414;
   margin-bottom: 20px;
   font-family: 'Jost', sans-serif;
-}
-
-.about .about-slider img {
-  width: 100%;
-  height: auto;
 } */
 
 /*--
