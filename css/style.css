@@ -441,7 +441,7 @@ a:active {
 /*--
     About start
 --*/
-.about .content h3 {
+/* .about .content h3 {
   font-size: 26px;
   font-weight: 300;
   line-height: 36px;
@@ -453,15 +453,7 @@ a:active {
 .about .about-slider img {
   width: 100%;
   height: auto;
-}
-
-.about .content a {
-  font-family: 'Jost', sans-serif;
-}
-
-.about .content p {
-  font-family: 'Jost', sans-serif;
-}
+} */
 
 /*--
     call-to-action start
