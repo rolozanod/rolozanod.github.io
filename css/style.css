@@ -104,7 +104,7 @@ a:active {
   /* line-height: 24px;
   font-weight: 300; */
 .heading p {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 16px;
 }
 
@@ -422,7 +422,7 @@ a:active {
   font-size: 30px;
   display: inline-block;
   margin-bottom: 15px;
-  color: #1bafb4;
+  color: #141414;
 }
 
 .service .block h3 {
