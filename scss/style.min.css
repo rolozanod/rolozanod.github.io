@@ -732,10 +732,7 @@ h4 {
 }
 .blog-single {
   padding: 100px 0 50px;
-  /* background-size: cover; */
-  /* background-attachment: fixed; */
   height: 100vh;
-  display: flex;
   justify-content: center;
   align-items: center;
 }
