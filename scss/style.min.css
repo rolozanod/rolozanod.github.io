@@ -740,7 +740,7 @@ h4 {
 }
 @media (max-width: 575px) {
   .blog-single {
-    padding-top: 10px;
+    padding-top: 50px;
   }
 }
 @media (max-width: 400px) {
