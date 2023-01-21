@@ -732,9 +732,6 @@ h4 {
 }
 .blog-single {
   padding: 100px 0 50px;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
 }
 @media (max-width: 991px) {
   .blog-single {
@@ -743,7 +740,7 @@ h4 {
 }
 @media (max-width: 575px) {
   .blog-single {
-    padding-top: 0px;
+    padding-top: 10px;
   }
 }
 @media (max-width: 400px) {
