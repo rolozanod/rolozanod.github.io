@@ -984,7 +984,8 @@ h4 {
 .blog-single .single-blog blockquote {
   background-color: #f6f6f6;
   padding: 45px 100px 40px 50px;
-  margin-bottom: 70px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   position: relative;
 }
 @media (max-width: 991px) {
