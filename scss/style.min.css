@@ -874,6 +874,9 @@ h4 {
 .blog-single .single-blog {
   position: relative;
   padding: 0 80px 60px;
+  /* Main Level */
+  /* Second Level */
+  /* Third Level */
 }
 @media (max-width: 767px) {
   .blog-single .single-blog {
@@ -1028,12 +1031,14 @@ h4 {
     font-size: 16px;
   }
 }
-.blog-single .single-blog ol {
-  list-style-type: decimal;
-  margin: 0px;
-}
 .blog-single .single-blog ul {
-  list-style-type: disc;
+  margin-left: 10px;
+}
+.blog-single .single-blog ul ul {
+  margin-left: 15px;
+}
+.blog-single .single-blog ul ul ul {
+  margin-left: 20px;
 }
 .blog-single-presentation {
   display: flex;
