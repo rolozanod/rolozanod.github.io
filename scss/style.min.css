@@ -876,6 +876,7 @@ h4 {
   padding: 0 80px 60px;
   /* Main Level */
   /* Second Level */
+  /* list-style-type: disc; */
   /* Third Level */
 }
 @media (max-width: 767px) {
@@ -1032,6 +1033,7 @@ h4 {
   }
 }
 .blog-single .single-blog ul {
+  list-style-type: disc;
   margin-left: 10px;
 }
 .blog-single .single-blog ul ul {
