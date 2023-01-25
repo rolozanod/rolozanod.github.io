@@ -234,11 +234,11 @@ h4 {
 }
 
 .about {
-  padding: 100px 0;
+  padding: 20px 0;
 }
 @media (max-width: 991px) {
   .about {
-    padding: 50px;
+    padding: 10px;
   }
 }
 @media (max-width: 767px) {
