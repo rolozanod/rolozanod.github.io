@@ -455,6 +455,12 @@ a:active {
   font-family: 'Jost', sans-serif;
 } */
 
+.about .content h3 {
+  font-size: 16px;
+  line-height: 25px;
+  margin: 0px;
+}
+
 /*--
     call-to-action start
 --*/
