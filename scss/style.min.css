@@ -883,6 +883,7 @@ h4 {
   /* Second Level */
   /* list-style-type: disc; */
   /* Third Level */
+  /* Fourth Level */
 }
 @media (max-width: 767px) {
   .blog-single .single-blog {
@@ -1057,6 +1058,9 @@ h4 {
 }
 .blog-single .single-blog ul ul ul {
   margin-left: 20px;
+}
+.blog-single .single-blog ul ul ul ul {
+  margin-left: 25px;
 }
 .blog-single .single-blog table {
   width: 100%;
