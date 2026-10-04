@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Growth Macro Dashboard</title>
+    <!-- Pyodide -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <script src="unifiedEngineChart.js?v=4"></script>
+    <style>
+        :root {
+            --bg: #121315;
+            --panel-bg: #202225;
+            --border: #36393e;
+            --text-main: #f0f0f0;
+            --text-muted: #888;
+            --real-color: #e07a5f;      
+            --nominal-color: #39ff14;   
+            --alert-color: #ff3333;     
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 15px; overflow-x: hidden; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .badge { padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 12px; display: none; margin-left: 10px; }
+        .alert-zlb { background: #330000; color: #ff3333; border: 1px solid #ff3333; }
+        .alert-debt { background: #331a00; color: #ff9933; border: 1px solid #ff9933; }
+        .status-ready { color: #4caf50; font-weight: bold; }
+        .status-loading { color: #f39c12; font-weight: bold; }
+        .status-error { color: var(--alert-color); font-weight: bold; }
+
+        .presets { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; justify-content: center; position: relative; z-index: 20; padding: 0 15px; }
+        .preset-btn { background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border); padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 13px; }
+        .preset-btn:hover { background: #36393e; }
+        .preset-btn.active { background: #4a5462; border-color: #7289da; }
+        .preset-btn[data-story] { border-color: #3b4252; background: #1a1e24; }
+        .preset-btn[data-story]:hover { border-color: #e07a5f; }
+        .preset-btn[data-story].active { background: #2d3748; border-color: #e07a5f; color: #fff; box-shadow: 0 0 12px rgba(224, 122, 95, 0.4); }
+
+        /* Unified Spatial Layout */
+        .universe {
+            position: relative;
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto 30px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        /* The Orbital Ring (Background Metaphor) */
+        .orbital-ring {
+            position: absolute;
+            top: -20px; left: 0; right: 0; bottom: -20px;
+            border: 2px dashed rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .external-node {
+            background: rgba(20, 22, 25, 0.9);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            width: 180px;
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        /* Domestic Core */
+        .domestic-sphere {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: radial-gradient(circle, #25282c 0%, #17181a 100%);
+            border: 1px solid #444;
+            border-radius: 40px;
+            padding: 30px 40px;
+            width: 1000px;
+            z-index: 10;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .flank-col { display: flex; flex-direction: column; gap: 20px; width: 140px; align-items: center; }
+
+        /* Metric Formatting */
+        .metric { width: 100%; text-align: center; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; border: 1px solid #333; }
+        .metric-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+        .metric-val { font-size: 16px; font-weight: bold; font-variant-numeric: tabular-nums; }
+        .real-text { color: var(--real-color); text-shadow: 0 0 5px rgba(224, 122, 95, 0.2); }
+        .nominal-text { color: var(--nominal-color); text-shadow: 0 0 5px rgba(57, 255, 20, 0.2); }
+
+        /* Tanks & Gauges */
+        .tanks-row { display: flex; gap: 15px; justify-content: center; }
+        .tank-container { display: flex; flex-direction: column; align-items: center; }
+        .tank { width: 50px; height: 100px; border: 2px solid #555; border-radius: 4px; position: relative; background: #0a0a0a; overflow: hidden; display: flex; align-items: flex-end; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+        .tank-fill { width: 100%; transition: height 0.4s cubic-bezier(0.4, 0.0, 0.2, 1); }
+        .real-fill { background: linear-gradient(to top, #6b3321, var(--real-color)); }
+        .nominal-fill { background: linear-gradient(to top, #165a10, var(--nominal-color)); box-shadow: 0 0 15px rgba(57,255,20,0.4); }
+        .tank-text { position: absolute; width: 100%; text-align: center; bottom: 5px; font-size: 12px; font-weight: bold; color: #fff; text-shadow: 0 1px 3px #000; z-index: 2; }
+        .tank-zero-line { position: absolute; width: 100%; height: 1px; background: rgba(255,255,255,0.4); bottom: 50%; z-index: 1; border-top: 1px dashed rgba(255,255,255,0.8); }
+
+        /* Base Tier Configs */
+        .base-tier { max-width: 1300px; margin: 0 auto; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; z-index: 10; position: relative;}
+        .sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .slider-group { display: flex; flex-direction: column; }
+        .slider-group label { font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 8px; }
+        input[type=range] { width: 100%; cursor: pointer; }
+        .timeline { width: 100%; height: 8px; background: #444; border-radius: 4px; outline: none; appearance: none; }
+        .timeline::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #7289da; cursor: pointer; }
+        
+        /* Guided Story Narrative Hub */
+        .story-hub {
+            max-width: 1000px;
+            margin: 0 auto 25px auto;
+            background: linear-gradient(135deg, rgba(28, 32, 38, 0.95), rgba(18, 20, 24, 0.95));
+            border: 1px solid rgba(224, 122, 95, 0.4);
+            border-radius: 12px;
+            padding: 18px 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 25;
+            transition: all 0.3s ease;
+        }
+        .story-hub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .story-badge-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .story-pill {
+            background: rgba(224, 122, 95, 0.2);
+            color: var(--real-color);
+            border: 1px solid rgba(224, 122, 95, 0.5);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .story-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .chapter-step {
+            font-size: 12px;
+            color: #aaa;
+            background: rgba(0,0,0,0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        .story-hub-body {
+            margin-bottom: 15px;
+        }
+        .chapter-title {
+            margin: 0 0 8px 0;
+            font-size: 17px;
+            color: #f3f4f6;
+        }
+        .chapter-text {
+            margin: 0;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: #d1d5db;
+            white-space: pre-wrap;
+            transition: opacity 0.3s ease;
+        }
+        .story-hub-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .story-btn {
+            background: #25282c;
+            color: var(--text-main);
+            border: 1px solid #444;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .story-btn:hover {
+            background: #36393e;
+            border-color: #888;
+        }
+        .story-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .story-btn-primary {
+            background: #e07a5f;
+            color: #fff;
+            border-color: #e07a5f;
+            box-shadow: 0 0 12px rgba(224, 122, 95, 0.4);
+        }
+        .story-btn-primary:hover {
+            background: #f97316;
+            border-color: #f97316;
+        }
+        .story-btn-primary.playing {
+            background: #22c55e;
+            border-color: #22c55e;
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+        }
+        .story-btn-close {
+            margin-left: auto;
+            background: transparent;
+            border-color: transparent;
+            color: #888;
+        }
+        .story-btn-close:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            .story-hub {
+                padding: 14px 16px;
+                margin-bottom: 18px;
+            }
+            .story-btn-close {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2 style="margin:0;">Growth Macro: Orbital Engine</h2>
+        <div style="display:flex; align-items:center;">
+            <span id="status" class="status-loading">Loading Engine...</span>
+            <span id="badge-zlb" class="badge alert-zlb">⚠️ ZERO LOWER BOUND</span>
+            <span id="badge-debt" class="badge alert-debt">⚠️ CROWDING OUT</span>
+            <span id="badge-hyper" class="badge alert-zlb">🔥 HYPERINFLATION WARNING</span>
+        </div>
+    </div>
+
+    <div class="presets">
+        <button id="btn-baseline" class="active preset-btn" data-scenario="baseline">⚙️ Manual Baseline</button>
+        <button class="preset-btn" data-story="usTechBoom">📖 Story 1: US Tech Boom</button>
+        <button class="preset-btn" data-story="japanLostDecade">📖 Story 2: Japan's Lost Decade</button>
+        <button class="preset-btn" data-story="usFiscalDeficit">📖 Story 3: US Fiscal Deficit</button>
+        <button class="preset-btn" data-story="tequilaCrisis">📖 Story 4: Tequila Crisis</button>
+    </div>
+
+    <!-- Guided Story Narrative Hub (Front and Center) -->
+    <div id="story-hub" class="story-hub">
+        <div class="story-hub-header">
+            <div class="story-badge-group">
+                <span class="story-pill">GUIDED STORY MODE</span>
+                <span id="story-title" class="story-title">Macroeconomic Narrative Tour</span>
+            </div>
+            <div class="story-progress-indicator">
+                <span id="chapter-step" class="chapter-step">Tour Ready</span>
+            </div>
+        </div>
+        <div class="story-hub-body">
+            <h3 id="chapter-title" class="chapter-title">Welcome to the Growth Engine</h3>
+            <p id="chapter-text" class="chapter-text">Tap any storyline button above (like US Tech Boom or Japan's Lost Decade) or click "Start Tour" to watch how long-run anchors steer short-run dynamics.</p>
+        </div>
+        <div class="story-hub-controls">
+            <button id="story-prev-btn" class="story-btn" disabled>⏮ Prev</button>
+            <button id="story-play-btn" class="story-btn story-btn-primary">▶ Start Tour (Story 1)</button>
+            <button id="story-next-btn" class="story-btn" disabled>Next ⏭</button>
+            <button id="story-close-btn" class="story-btn story-btn-close" style="display:none;" title="Exit Story Mode">✕ Exit</button>
+        </div>
+    </div>
+
+    <div class="universe">
+        <div class="orbital-ring"></div>
+        
+        <!-- EXTERNAL SECTOR: LEFT NODE -->
+        <div class="external-node">
+            <div class="metric-label">Nominal Exch. Parity (e_E_h)</div>
+            <div class="metric-val nominal-text" id="val-eh" style="font-size: 20px;">--</div>
+        </div>
+
+        <!-- DOMESTIC CORE -->
+        <div class="domestic-sphere">
+            
+            <!-- Nominal Flank -->
+            <div class="flank-col">
+                <div class="tanks-row">
+                    <div class="tank-container">
+                        <div class="tank-label" style="color:var(--nominal-color);">L(i)</div>
+                        <div class="tank" style="border-color: #1a4a15;">
+                            <div class="tank-fill nominal-fill" id="gauge-li-fill" style="height: 0%;"></div>
+                            <div class="tank-text" id="val-li">--</div>
+                        </div>
+                    </div>
+                    <div class="tank-container">
+                        <div class="tank-label" style="color:var(--nominal-color);">S</div>
+                        <div class="tank" style="height:70px; width:45px; border-color: #1a4a15;">
+                            <div class="tank-fill nominal-fill" id="gauge-s-fill" style="height: 0%;"></div>
+                            <div class="tank-text" id="val-s">--</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Inflation (π)</div>
+                    <div class="metric-val nominal-text" id="val-pi">--</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Nominal Rate (i)</div>
+                    <div class="metric-val nominal-text" id="val-i">--</div>
+                </div>
+            </div>
+
+            <!-- Central Engine (3-Panel synchronized chart) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
+                <canvas id="unifiedEngineChart" width="600" height="400" style="background: #1e293b; border-radius: 8px; border: 1px solid #475569; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"></canvas>
+                <canvas id="eqChart" width="600" height="320" style="background: rgba(0,0,0,0.6); border: 1px solid #444; border-radius: 8px 8px 0 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);"></canvas>
+                
+                <!-- Timeline Scrubber aligned with axis (left: 50px, right: 20px) -->
+                <div style="width: 600px; box-sizing: border-box; background: rgba(0,0,0,0.6); border: 1px solid #444; border-top: none; border-radius: 0 0 8px 8px; padding: 10px 20px 15px 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.8);">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: #888; margin-bottom: 5px;">
+                        <span>t=1</span>
+                        <span>Period <span id="val-t" style="color: #fff; font-weight: bold; font-size: 12px;">1</span></span>
+                        <span>t=20</span>
+                    </div>
+                    <input type="range" class="timeline" id="time-slider" min="1" max="20" value="1" disabled style="width: 100%;">
+                </div>
+            </div>
+
+            <!-- Real Flank -->
+            <div class="flank-col">
+                <div class="tank-container">
+                    <div class="tank-label">Capital (K)</div>
+                    <div class="tank" style="width: 60px;">
+                        <div class="tank-fill real-fill" id="tank-k-fill" style="height: 0%;"></div>
+                        <div class="tank-text" id="val-k">--</div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Output Gap</div>
+                    <div class="metric-val real-text" id="val-gap">--</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Output (y)</div>
+                    <div class="metric-val real-text" id="val-y">--</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Real Wage (w)</div>
+                    <div class="metric-val real-text" id="val-w">--</div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- EXTERNAL SECTOR: RIGHT NODES -->
+        <div style="display: flex; flex-direction: column; gap: 30px; z-index: 10;">
+            <div class="external-node">
+                <div class="metric-label">NFA / GDP (QID/y)</div>
+                <div class="tank" style="margin: 10px auto;">
+                    <div class="tank-zero-line"></div>
+                    <div class="tank-fill real-fill" id="tank-qid-fill" style="height: 0%;"></div>
+                    <div class="tank-text" id="val-qid">--</div>
+                </div>
+                <div class="metric-label" style="margin-top:15px;">Gov Debt</div>
+                <div class="metric-val real-text" id="val-debt">--</div>
+            </div>
+
+            <div class="external-node">
+                <div class="metric-label">Real Exch. Parity (e_ε_h)</div>
+                <div class="metric-val real-text" id="val-eps" style="font-size: 18px;">--</div>
+                
+                <!-- Balancing Scale -->
+                <div style="position:relative; width: 100px; height: 30px; margin: 15px auto;">
+                    <div id="scale-arm" style="position:absolute; top:10px; width:100%; height:4px; background:var(--real-color); transition: transform 0.3s; transform-origin: center;"></div>
+                    <div style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:0; height:0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 15px solid #888;"></div>
+                </div>
+
+                <div class="metric-label">Risk Premium</div>
+                <div class="metric-val real-text" id="val-risk">--</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Base Tier Config -->
+    <div class="base-tier">
+        <div>
+            <h3>Initial State Config (t=0)</h3>
+            <div class="sliders">
+                <div class="slider-group">
+                    <label>Initial Capital (K) <span id="lbl-k">Auto (Steady)</span></label>
+                    <input type="range" id="param-k" min="0" max="5000" step="10" value="0">
+                </div>
+                <div class="slider-group">
+                    <label>Initial Labor (L) <span id="lbl-l">100</span></label>
+                    <input type="range" id="param-l" min="10" max="500" step="10" value="100">
+                </div>
+            </div>
+        </div>
+        <div>
+            <h3>Structural Base Parameters</h3>
+            <div class="sliders">
+                <div class="slider-group">
+                    <label>Tech Growth (e_A) <span id="lbl-ea">0.02</span></label>
+                    <input type="range" id="param-ea" min="0.0" max="0.10" step="0.01" value="0.02">
+                </div>
+                <div class="slider-group">
+                    <label>Money Printing (f_p') <span id="lbl-fp">0.05</span></label>
+                    <input type="range" id="param-fp" min="0.0" max="0.20" step="0.01" value="0.05">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="bridge.js?v=8"></script>
+    <script src="storyConfig.js?v=6"></script>
+    <script src="storyController.js?v=6"></script>
+</body>
+</html>
